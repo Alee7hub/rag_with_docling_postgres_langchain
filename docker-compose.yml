@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  postgres:
+    image: pgvector/pgvector:pg16  # Changed from postgres:15
+    environment:
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ragpass
+      POSTGRES_DB: ragdb
+    ports:
+      - "5555:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
