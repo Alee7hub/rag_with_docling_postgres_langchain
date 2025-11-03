@@ -1,3 +1,4 @@
+import os
 from langchain.tools import tool
 from langchain_postgres import PGVector
 from langchain_openai import OpenAIEmbeddings
@@ -6,11 +7,17 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+# PostgreSQL Configuration
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+
 # initiate embeddings model
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 # Connection string
-CONNECTION_STRING = "postgresql+psycopg://raguser:ragpass@localhost:5555/ragdb"
+CONNECTION_STRING = f"postgresql+psycopg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 # Initialize vector store
 vectorstore = PGVector(
