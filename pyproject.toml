@@ -11,6 +11,7 @@ dependencies = [
     "langchain-postgres>=0.0.16",
     "langchain[openai]>=1.0.2",
     "numpy>=2.3.4",
+    "openai-whisper>=20250625",
     "pgvector>=0.3.6",
     "psycopg>=3.2.12",
     "psycopg2>=2.9.11",
