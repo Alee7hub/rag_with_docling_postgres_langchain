@@ -1,6 +1,6 @@
 """
 Professional Document Processing, Chunking, Embedding, and Ingestion Pipeline with Docling, LangChain, and PostgreSQL
-Handles text documents (PDF, DOCX, MD, HTML, TXT) and audio files (MP3, WAV, M4A, FLAC)
+Handles text documents (PDF, DOCX, MD, HTML, TXT) and audio files (MP3, WAV)
 Converts to markdown → chunks → LangChain Document objects → embeddings → PostgreSQL ingestion
 """
 
@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 from dataclasses import dataclass
 from enum import Enum
+from dotenv import load_dotenv
 
 from docling.document_converter import DocumentConverter, AudioFormatOption
 from docling.datamodel.pipeline_options import AsrPipelineOptions
@@ -20,6 +21,9 @@ from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from transformers import AutoTokenizer
+
+# Load environment variables
+load_dotenv()
 
 # get raw documents directory from environment variable
 raw_docs_dir = os.getenv("RAW_DOCUMENTS_DIR")
@@ -70,7 +74,7 @@ class UnifiedDocumentProcessor:
         audio_extensions: Set of supported audio file extensions
     """
     
-    AUDIO_EXTENSIONS = {'.mp3', '.wav', '.m4a', '.flac'}
+    AUDIO_EXTENSIONS = {'.mp3', '.wav'}
     
     def __init__(self, max_tokens: int = 512, tokenizer_model: str = "sentence-transformers/all-MiniLM-L6-v2"):
         """
@@ -239,7 +243,7 @@ class UnifiedDocumentProcessor:
         Process all documents in a directory: convert → chunk → return LangChain Documents.
         
         Handles both text documents (PDF, DOCX, MD, HTML, TXT) and 
-        audio files (MP3, WAV, M4A, FLAC) automatically.
+        audio files (MP3, WAV) automatically.
         
         Args:
             documents_dir: Directory containing documents to process
@@ -334,7 +338,7 @@ def process_documents_to_langchain(documents_dir: str, max_tokens: int = 512,
     Convenience function: Process documents from directory and return chunked LangChain Documents.
     
     Supports both text documents (PDF, DOCX, MD, HTML, TXT) and 
-    audio files (MP3, WAV, M4A, FLAC).
+    audio files (MP3, WAV).
     
     Args:
         documents_dir: Directory containing documents to process

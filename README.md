@@ -111,7 +111,10 @@ Replace `<container_name>` with your actual container name (find it using `docke
 The project includes sample documents in `documents/raw/`. To process and load them into the vector store, simply run:
 
 ```bash
-python load_chunk_embed.py
+python load_chunk_embed_ingest.py
+
+# or
+uv run load_chunk_embed_ingest.py
 ```
 
 This automated script will:
@@ -123,18 +126,23 @@ This automated script will:
 
 **Alternative: Using Jupyter Notebook** (recommended for learning and experimentation)
 
-If you want to understand the process step-by-step or experiment with parameters:
+If you want to understand the process step-by-step or experiment with parameters, take a look at:
 
 ```bash
-jupyter notebook notebooks/load_chunk_to_langchain_docs.ipynb
+notebooks/docling_test.ipynb
+notebooks/load_chunk_to_langchain_docs.py
+notebooks/load_chunk_embed_ingest_test.ipynb
 ```
 
-The notebook provides the same functionality with detailed explanations and the ability to inspect intermediate results.
+These notebooks provide the same functionality with detailed explanations and the ability to inspect intermediate results.
 
 ### 7. Run the Application
 
 ```bash
 python main.py
+
+# or
+uv run main.py
 ```
 
 You'll see an interactive prompt where you can ask questions about your documents:
@@ -156,7 +164,7 @@ langchain_docling_postgres/
 ├── main.py                      # Entry point - interactive CLI
 ├── agent.py                     # LangChain agent configuration
 ├── tools.py                     # RAG retrieval tool definition
-├── load_chunk_embed.py          # Document processing & embedding script
+├── load_chunk_embed_ingest.py   # Document processing & embedding script
 ├── docker-compose.yml           # PostgreSQL + pgvector setup
 ├── pyproject.toml               # Project dependencies
 ├── requirements.txt             # pip dependencies
@@ -165,7 +173,7 @@ langchain_docling_postgres/
 │   ├── raw/                     # Place your documents here
 │   └── processed/               # Processed document outputs
 └── notebooks/
-    ├── load_chunk_to_langchain_docs.ipynb  # Document processing pipeline (interactive)
+    ├── docling_test.ipynb       # Document processing pipeline (interactive)
     └── ...                      # Other experimental notebooks
 ```
 
@@ -216,17 +224,12 @@ retrieved_docs = vectorstore.similarity_search(query, k=3)  # Change k value
 2. Ensure `RAW_DOCUMENTS_DIR` in `.env` points to the correct directory
 3. Run the processing script:
    ```bash
-   python load_chunk_embed.py
+   python load_chunk_embed_ingest.py
+
+   # or
+   uv run load_chunk_embed_ingest.py
    ```
 4. Documents will be automatically parsed, chunked, embedded, and stored in PostgreSQL
-
-## 🧪 Notebooks
-
-The `notebooks/` directory contains interactive examples:
-
-- **`load_chunk_to_langchain_docs.ipynb`**: Complete document processing pipeline
-- **`docling_test.ipynb`**: Experimenting with Docling features
-- **`streaming_types.ipynb`**: Testing streaming response formats
 
 ## 🐛 Troubleshooting
 

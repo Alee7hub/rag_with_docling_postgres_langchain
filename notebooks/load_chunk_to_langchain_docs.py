@@ -1,6 +1,6 @@
 """
 Professional Document Processing and Chunking Pipeline with Docling
-Handles text documents (PDF, DOCX, MD, HTML, TXT) and audio files (MP3, WAV, M4A, FLAC)
+Handles text documents (PDF, DOCX, MD, HTML, TXT) and audio files (MP3, WAV)
 Converts to markdown → chunks → returns LangChain Document objects
 """
 

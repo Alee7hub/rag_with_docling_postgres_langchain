@@ -1,53 +1,7 @@
-# PostgreSQL + pgvector Setup Report
+# PostgreSQL + pgvector Setup
 
 ## Objective
 Set up a containerized PostgreSQL database with pgvector extension as a vector store for a RAG application, with data persistence across container restarts.
-
-## Initial Approach (Failed)
-Started with a standard `postgres:15` image and attempted manual pgvector installation inside the container. This approach had critical flaws:
-- Manual installations inside containers are ephemeral and lost on restart
-- Required version-specific development packages
-- Added unnecessary complexity
-
-## Key Errors Encountered
-
-### 1. Authentication Error
-```
-password authentication failed for user "raguser"
-```
-**Root cause**: Wrong psycopg driver version. LangChain's modern `PGVector` requires `psycopg` (v3), not `psycopg2`.
-
-**Resolution**: 
-- Changed connection string from `postgresql+psycopg2://` to `postgresql+psycopg://`
-- Installed `psycopg` package instead of `psycopg2-binary`
-- Used correct import: `from langchain_postgres import PGVector`
-
-### 2. Schema Mismatch Error
-```
-column "id" of relation "langchain_pg_embedding" does not exist
-```
-**Root cause**: Pre-existing tables with incorrect schema.
-
-**Resolution**: Dropped existing tables and let PGVector auto-create proper schema.
-
-### 3. Missing Extension Error
-```
-could not access file "$libdir/vector": No such file or directory
-```
-**Root cause**: Manually installed pgvector was lost after container restart (ephemeral nature of containers).
-
-**Resolution**: Switched to `pgvector/pgvector:pg16` image with pgvector pre-installed.
-
-### 4. Database Incompatibility Error
-```
-database files are incompatible with server
-The data directory was initialized by PostgreSQL version 15, which is not compatible with this version 16
-```
-**Root cause**: Volume contained Postgres 15 data, incompatible with Postgres 16.
-
-**Resolution**: Removed volume with `docker-compose down -v` for clean initialization.
-
-## Final Working Setup
 
 ### docker-compose.yml
 ```yaml
